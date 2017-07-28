@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<infranet name="Billing" path="/" xmlns="http://tempuri/xsd/infragen">
+  <instance>
+    <connection>
+      <host>kenga.msk.mt</host>
+      <port>11950</port>
+      <login>root.0.0.0.1</login>
+      <password>password</password>
+      <advanced>
+        <timer>1000</timer>
+      </advanced>
+    </connection>
+    <transaction>
+      <timeout>20000</timeout>
+      <max>100</max>
+    </transaction>
+    <logging>
+      <file>
+        <role>infoRole</role>
+        <role>errorRole</role>
+        <role>warnRole</role>
+        <role>debugRole</role>
+      </file>
+      <stdio>
+        <role>infoRole</role>
+        <role>errorRole</role>
+        <role>warnRole</role>
+      </stdio>
+    </logging>
+  </instance>
+  <session name="DefaultRVSession" type="rv">
+    <dispatchers>5</dispatchers>
+  </session>
+  <service name="Search" default="true">
+    <session>DefaultRVSession</session>
+    <transaction>true</transaction>
+    <subject>%%Domain%%.%%Deployment%%.InfranetAdapter.%%InstanceId%%.Search%%Suffix%%</subject>
+  </service>
+  <operation name="Query" opcode="PCM_OP_SEARCH" flags="0" service="Search">
+    <in>
+      <POID key="true"/>
+      <FLAGS/>
+      <TEMPLATE/>
+      <ARGS>
+        <ACCOUNT_OBJ/>
+        <POID/>
+      </ARGS>
+      <RESULTS>
+        <SERVICE_INFO>
+          <SERVICE_OBJ/>
+        </SERVICE_INFO>
+      </RESULTS>
+    </in>
+    <out>
+      <POID key="true"/>
+      <RESULTS>
+        <SERVICE_INFO>
+          <SERVICE_OBJ/>
+        </SERVICE_INFO>
+      </RESULTS>
+    </out>
+  </operation>
+</infranet>

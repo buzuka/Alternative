@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://tempuri/xsd/infragen"
+            xmlns:self="http://tempuri/xsd/infragen"
+            attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xsd:element name="infranet">
+    <xsd:complexType>
+      <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsd:element name="instance" type="self:InstanceType" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="fields" type="self:FieldsType" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="session" type="self:SessionType" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="service" type="self:ServiceType" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="operation" type="self:OperationType" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="query" type="self:QueryType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="name" use="optional"/>
+      <xsd:attribute name="path" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="InstanceType">
+    <xsd:sequence>
+      <xsd:element name="connection" minOccurs="0">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:group ref="self:HostGroup" minOccurs="0"/>
+            <xsd:element name="advanced" minOccurs="0">
+              <xsd:complexType>
+                <xsd:all>
+                  <xsd:element name="suspend-after" type="xsd:integer" minOccurs="0"/>
+                  <xsd:element name="retries" type="xsd:integer" minOccurs="0"/>
+                  <xsd:element name="timer" type="xsd:integer" minOccurs="0"/>
+                  <xsd:element name="sleep" type="xsd:integer" minOccurs="0"/>
+                </xsd:all>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="transaction" minOccurs="0">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="timeout" type="xsd:integer"/>
+            <xsd:element name="max" type="xsd:integer"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="logging" minOccurs="0">
+        <xsd:complexType>
+          <xsd:all>
+            <xsd:element name="stdio" type="self:BaseSinkType" minOccurs="0"/>
+            <xsd:element name="file" type="self:BaseSinkType" minOccurs="0"/>
+          </xsd:all>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:group ref="self:AgentsGroup" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:group name="HostGroup">
+    <xsd:sequence>
+      <xsd:element name="host" type="xsd:string"/>
+      <xsd:element name="port" type="xsd:string"/>
+      <xsd:element name="login" type="xsd:string"/>
+      <xsd:element name="password" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:group>
+
+  <xsd:group name="AgentsGroup">
+    <xsd:sequence>
+      <xsd:element name="std-timeout" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="hawk-timeout" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:group>
+
+  <xsd:complexType name="BaseSinkType">
+    <xsd:sequence>
+      <xsd:element name="role" type="xsd:string" maxOccurs="unbounded" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="FieldsType">
+    <xsd:sequence>
+      <xsd:element name="field" type="self:FieldAttribute" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="FieldAttribute">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="id" type="xsd:int" use="required"/>
+        <xsd:attribute name="type" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="SessionType">
+    <xsd:sequence>
+      <xsd:group ref="self:RvGroup" minOccurs="0"/>
+      <xsd:element name="dispatchers" type="xsd:int" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" use="required"/>
+    <xsd:attribute name="type" use="required" type="self:TypeEnum"/>
+    <xsd:attribute name="default" use="optional" type="xsd:boolean"/>
+  </xsd:complexType>
+
+  <xsd:simpleType name="TypeEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="rv"/>
+      <xsd:enumeration value="rvcm"/>
+      <xsd:enumeration value="rvcmq"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:group name="RvGroup">
+    <xsd:sequence>
+      <xsd:element name="daemon" type="xsd:string"/>
+      <xsd:element name="service" type="xsd:string"/>
+      <xsd:element name="network" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:group>
+  
+  <xsd:complexType name="ServiceType">
+    <xsd:all>
+      <xsd:element name="session" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="transaction" type="xsd:boolean" minOccurs="0"/>
+      <xsd:element name="subject" type="xsd:string" minOccurs="0"/>
+    </xsd:all>
+    <xsd:attribute name="name" use="required"/>
+    <xsd:attribute name="default" use="optional" type="xsd:boolean"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="OperationType">
+    <xsd:sequence>
+      <xsd:element name="in">
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:any namespace="##any" processContents="skip"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="out">
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:any namespace="##any" processContents="skip"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="name" use="required"/>
+    <xsd:attribute name="opcode" use="required"/>
+    <xsd:attribute name="flags" use="optional"/>
+    <xsd:attribute name="service" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="QueryType">
+    <xsd:sequence>
+      <xsd:element name="template" type="xsd:string"/>
+      <xsd:element name="class" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="out">
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:any namespace="##any" processContents="skip"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="name" use="required"/>
+    <xsd:attribute name="flags" use="optional"/>
+    <xsd:attribute name="service" use="optional"/>
+  </xsd:complexType>
+</xsd:schema>

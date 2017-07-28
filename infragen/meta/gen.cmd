@@ -1,0 +1,1 @@
+"C:\Program Files\Xsd2Code\Xsd2Code.exe" schema.xsd Alternative.infragen.Schema /pl Net35 /o schema.cs

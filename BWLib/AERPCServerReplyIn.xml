@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProcessStarterReply xmlns:ns="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/siebel/CRM/businessDocument/operation">
+  <ns:__caret_reply_caret_TemplateRRIServiceEvent_caret_processEvent>
+    <advisoryDoc>
+      <Version></Version>
+      <Data></Data>
+    </advisoryDoc>
+  </ns:__caret_reply_caret_TemplateRRIServiceEvent_caret_processEvent>
+</ProcessStarterReply>
